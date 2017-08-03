@@ -5,7 +5,13 @@ from config import *
 from flask import render_template
 
 app = Flask(__name__)
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+import time
+import predicting
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -33,19 +39,22 @@ def index():
 
 @app.route('/uploaded')
 def uploaded():
-    import predicting
-    pred_class, pred_certain = predicting.evaluate(filename=request.args.get('filename'))
+    begin = time.time()
+    pred_class, pred_score = predicting.evaluate(filename=request.args.get('filename'))
+    end = time.time()
+    print("\nElapsed time: %0.5f seconds." % (end-begin))
+    
     return render_template("uploaded.html",
         pred_class_0=str(pred_class[0]),
         pred_class_1=str(pred_class[1]),
         pred_class_2=str(pred_class[2]),
         pred_class_3=str(pred_class[3]),
         pred_class_4=str(pred_class[4]),
-        pred_certain_0=str(pred_certain[0]),
-        pred_certain_1=str(pred_certain[1]),
-        pred_certain_2=str(pred_certain[2]),
-        pred_certain_3=str(pred_certain[3]),
-        pred_certain_4=str(pred_certain[4]))
+        pred_score_0=str(pred_score[0]),
+        pred_score_1=str(pred_score[1]),
+        pred_score_2=str(pred_score[2]),
+        pred_score_3=str(pred_score[3]),
+        pred_score_4=str(pred_score[4]))
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

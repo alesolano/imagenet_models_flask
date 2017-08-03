@@ -1,6 +1,10 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # ignore debugging logs
+
 import tensorflow as tf
 import numpy as np
 import cv2
+
 from config import *
 
 ### GRAPH ###
@@ -20,9 +24,8 @@ with open('./models/imagenet-classes.txt') as f:
 
 
 def evaluate(filename):
-
     ### IMAGE PREPROCESSING ###
-    img = cv2.imread('./static_files/'+filename)
+    img = cv2.imread(UPLOAD_FOLDER + '/' + filename)
     prep_img = cv2.resize(img, (224, 224), interpolation = cv2.INTER_CUBIC)
     prep_img = prep_img.reshape([1, 224, 224, 3])
     print("The input image has been resized from {} to {}".format(img.shape, prep_img.shape))
@@ -37,6 +40,6 @@ def evaluate(filename):
 
         pred_idx = prob_values[0].argsort()[-5:][::-1]
         pred_class = classes[pred_idx]
-        pred_certain = np.around(100*prob_values[0][pred_idx], decimals=2) # two decimals
-        
-        return list(pred_class), list(pred_certain)
+        pred_score = np.around(100*prob_values[0][pred_idx], decimals=2) # two decimals
+
+        return list(pred_class), list(pred_score)
