@@ -3,6 +3,17 @@
     <title>Upload New File</title>
     <h1>Upload New File</h1>
     <form method=post enctype=multipart/form-data>
+
+        <h4>Select Model:</h4>
+        <input type="radio" name="ml_models" id="incresnetv2" value="IncResNetV2"> IncResNetV2 </input>
+        <input type="radio" name="ml_models" id="mobilenetv1" value="MobileNetV1"> MobileNetV1  </input><br>
+
+        <h4>Graph Importing Options:</h4>
+        <input type="radio" name="import_options" id="checkpoints" value="Checkpoints"> Checkpoints </input>
+        <input type="radio" name="import_options" id="frozen"      value="Frozen">      Frozen      </input>
+        <input type="radio" name="import_options" id="compiled"    value="Compiled">    Compiled    </input><br>
+
+        <h4>Select File to Process:</h4>
         <input type=file name=file><input type=submit value=Upload>
     </form>
 {% endblock %}

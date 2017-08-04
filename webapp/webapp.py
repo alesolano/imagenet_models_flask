@@ -24,7 +24,27 @@ def index():
         if 'file' not in request.files:
             print('No file part')
             return redirect(request.url)
+
+        '''Optional: check if the post request has import_options or ml_models.
+        But more elegant is to do it in the front end.
+
+        print (request.form)
+        print (type(request.form))
+
+        if 'import_options' not in request.form:
+            print('No importing options selected')
+            return redirect(request.url)
+
+        if 'ml_models' not in request.form:
+            print('No ml_models selected')
+            return redirect(request.url)
+        '''
+
+        #Variables for request parameters:
         file = request.files['file']
+        import_options = request.form['import_options']
+        ml_models = request.form['ml_models']
+
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
@@ -34,11 +54,21 @@ def index():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #return redirect('/uploaded')
-            return redirect(url_for('uploaded', filename=filename))
+            return redirect(url_for('uploaded', filename=filename, import_options=import_options, ml_models=ml_models))
     return render_template("index.html")
 
 @app.route('/uploaded')
 def uploaded():
+    import_options = request.args.get('import_options')
+    ml_models = request.args.get('ml_models')
+    print("selected import option:",import_options)
+    print("selected ml_models:",ml_models)
+    return render_template("uploaded.html",
+        ml_models=ml_models,
+        import_options=import_options
+                           )
+
+    '''
     begin = time.time()
     pred_class, pred_score = predicting.evaluate(filename=request.args.get('filename'))
     end = time.time()
@@ -55,6 +85,7 @@ def uploaded():
         pred_score_2=str(pred_score[2]),
         pred_score_3=str(pred_score[3]),
         pred_score_4=str(pred_score[4]))
+    '''
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
