@@ -6,7 +6,7 @@ from tensorflow.contrib import slim
 
 from sys import path as syspath
 
-models_slim_dir = None
+models_slim_dir = '/Users/Alex/models/slim'
 
 if models_slim_dir is None:
   print("Replace 'models_slim_dir' with path of clone_dir/models/slim from: git clone https://github.com/tensorflow/models.git")
