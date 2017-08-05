@@ -24,3 +24,6 @@ htmlcov
 .ckpt
 .ckpt.index
 .ckpt.meta
+.index
+.meta
+.data-00000-of-00001
