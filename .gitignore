@@ -19,3 +19,8 @@ htmlcov
 .coverage
 .coverage.*
 *,cover
+
+#Machine Learning Models
+.ckpt
+.ckpt.index
+.ckpt.meta
