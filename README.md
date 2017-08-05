@@ -16,6 +16,7 @@ source activate imagenet_models_flask
 conda install -c menpo opencv3
 conda install -c anaconda flask
 conda install flask-wtf tensorflow
+pip install flask-bootstrap
 ```
 
 ### Run

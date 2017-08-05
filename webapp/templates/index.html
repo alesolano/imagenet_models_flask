@@ -2,18 +2,52 @@
 {% block content %}
     <title>Upload New File</title>
     <h1>Upload New File</h1>
-    <form method=post enctype=multipart/form-data>
+    <form method=post enctype=multipart/form-data >
 
         <h4>Select Model:</h4>
-        <input type="radio" name="ml_models" id="incresnetv2" value="IncResNetV2"> IncResNetV2 </input>
-        <input type="radio" name="ml_models" id="mobilenetv1" value="MobileNetV1"> MobileNetV1  </input><br>
+        <div class="radio">
+          <label>
+              <input type="radio" name="ml_models" id="incresnetv2" value="IncResNetV2"> IncResNetV2 </input>
+          </label>
+        </div>
+
+        <div class="radio">
+          <label>
+              <input type="radio" name="ml_models" id="mobilenetv1" value="MobileNetV1"> MobileNetV1  </input><br>
+          </label>
+        </div>
 
         <h4>Graph Importing Options:</h4>
-        <input type="radio" name="import_options" id="checkpoints" value="Checkpoints"> Checkpoints </input>
-        <input type="radio" name="import_options" id="frozen"      value="Frozen">      Frozen      </input>
-        <input type="radio" name="import_options" id="compiled"    value="Compiled">    Compiled    </input><br>
+        <div class="radio">
+          <label>
+            <input type="radio" name="import_options" id="checkpoints" value="Checkpoints"> Checkpoints </input>
+          </label>
+        </div>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="import_options" id="frozen"      value="Frozen">      Frozen      </input>
+          </label>
+        </div>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="import_options" id="compiled"    value="Compiled">    Compiled    </input><br>
+          </label>
+        </div>
 
         <h4>Select File to Process:</h4>
-        <input type=file name=file><input type=submit value=Upload>
+        <!--
+
+        <input type=file name=file><input type=submit class="btn btn-primary" value=Upload>
+        -->
+
+        <label class="btn btn-default btn-file">
+            Choose File<input type="file" style="display: none;">
+        </label>
+        <input type=submit class="btn btn-primary" value=Upload>
+
+
+
     </form>
 {% endblock %}
