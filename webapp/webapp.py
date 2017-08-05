@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from config import *
 from flask import render_template
+#from flask import flask-bootstrap
 
 app = Flask(__name__)
 
@@ -24,6 +25,7 @@ def index():
         if 'file' not in request.files:
             print('No file part')
             return redirect(request.url)
+        print('HERE1!!')
 
         '''Optional: check if the post request has import_options or ml_models.
         But more elegant is to do it in the front end.
@@ -39,6 +41,7 @@ def index():
             print('No ml_models selected')
             return redirect(request.url)
         '''
+        print('HERE2!!')
 
         #Variables for request parameters:
         file = request.files['file']
@@ -54,6 +57,7 @@ def index():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #return redirect('/uploaded')
+            print('return successful')
             return redirect(url_for('uploaded', filename=filename, import_options=import_options, ml_models=ml_models))
     return render_template("index.html")
 
@@ -63,11 +67,11 @@ def uploaded():
     ml_models = request.args.get('ml_models')
     print("selected import option:",import_options)
     print("selected ml_models:",ml_models)
+
+    '''
     return render_template("uploaded.html",
         ml_models=ml_models,
-        import_options=import_options
-                           )
-
+        import_options=import_options)
     '''
     begin = time.time()
     pred_class, pred_score = predicting.evaluate(filename=request.args.get('filename'))
@@ -75,6 +79,8 @@ def uploaded():
     print("\nElapsed time: %0.5f seconds." % (end-begin))
     
     return render_template("uploaded.html",
+        ml_models=ml_models,
+        import_options=import_options,
         pred_class_0=str(pred_class[0]),
         pred_class_1=str(pred_class[1]),
         pred_class_2=str(pred_class[2]),
@@ -85,7 +91,6 @@ def uploaded():
         pred_score_2=str(pred_score[2]),
         pred_score_3=str(pred_score[3]),
         pred_score_4=str(pred_score[4]))
-    '''
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
