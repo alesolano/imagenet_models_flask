@@ -1,0 +1,29 @@
+.DS_Store
+.env
+.flaskenv
+*.pyc
+*.pyo
+env
+env*
+dist
+build
+*.egg
+*.egg-info
+_mailinglist
+.tox
+.cache/
+.idea/
+
+# Coverage reports
+htmlcov
+.coverage
+.coverage.*
+*,cover
+
+#Machine Learning Models
+.ckpt
+.ckpt.index
+.ckpt.meta
+.index
+.meta
+.data-00000-of-00001
