@@ -52,7 +52,9 @@ def index():
             print('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            print ('filename',file.filename)
             filename = secure_filename(file.filename)
+            print ('secure_filename',filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #return redirect('/uploaded')
             print('return successful')
@@ -66,6 +68,7 @@ def uploaded():
     import_option = request.args.get('import_option')
     print("Selected import option:", import_option)
     print("Selected model:", model_name)
+    print("Filename:", filename)
 
     begin = time.time()
     pred_class, pred_score = predictor.evaluate(
@@ -76,6 +79,7 @@ def uploaded():
     #print("\nElapsed time: %0.5f seconds." % (end-begin))
     
     return render_template("uploaded.html",
+        filename=filename,
         pred_class_0=str(pred_class[0]),
         pred_class_1=str(pred_class[1]),
         pred_class_2=str(pred_class[2]),
@@ -88,6 +92,15 @@ def uploaded():
         pred_score_4=str(pred_score[4]),
         elapsed_time=format(end-begin, '.5f'))
 
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
-    
