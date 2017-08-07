@@ -11,6 +11,6 @@ git clone https://github.com/tensorflow/models.git
 ```
 cd /path/to/webapp/models
 python download_and_save_inceptionresnet.py
-mkdir inception_resnet_v2
-mv /tmp/inception_resnet_v2/model* ./inception_resnet_v2/
 ```
+
+Hopefully (not tested yet) you can download easily all the models from [here](https://github.com/tensorflow/models/tree/master/slim#pre-trained-models) changing just a bit of the code in `download_and_save_inceptionresnet.py`.

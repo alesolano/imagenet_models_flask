@@ -17,6 +17,10 @@ conda install -c menpo opencv3
 conda install -c anaconda flask
 ```
 
+### Download models
+
+See README.md in `./webapp/models/`.
+
 ### Run
 
 ```

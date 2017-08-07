@@ -7,10 +7,9 @@ from tensorflow.contrib import slim
 from sys import path as syspath
 
 models_slim_dir = None
-
 if models_slim_dir is None:
-  print("Replace 'models_slim_dir' with path of clone_dir/models/slim from: git clone https://github.com/tensorflow/models.git")
-  exit()
+    print("Replace 'models_slim_dir' with path of clone_dir/models/slim from: git clone https://github.com/tensorflow/models.git")
+    exit()
 else:
   syspath.append(models_slim_dir)
 
@@ -27,13 +26,21 @@ net_name = 'inception_resnet_v2'
 net_version = '_2016_08_30'
 
 url = "http://download.tensorflow.org/models/"+net_name+net_version+".tar.gz"
-checkpoints_dir = '/tmp/' + net_name
+checkpoints_dir = net_name
+
+download_dir = None
+if download_dir is None:
+    print("Replace 'download_dir' with your path for downloading. Recommended for Linux and MacOS:  '/tmp/'+net_name  ")
+    exit()
+
+if not tf.gfile.Exists(download_dir):
+    tf.gfile.MakeDirs(download_dir)
 
 if not tf.gfile.Exists(checkpoints_dir):
     tf.gfile.MakeDirs(checkpoints_dir)
 
-if not tf.gfile.Exists(checkpoints_dir+'/'+net_name+net_version+'.ckpt'):
-    dataset_utils.download_and_uncompress_tarball(url, checkpoints_dir)
+if not tf.gfile.Exists(os.path.join(download_dir, net_name+net_version+'.ckpt')):
+    dataset_utils.download_and_uncompress_tarball(url, download_dir)
 
 
 with tf.Graph().as_default():
@@ -60,7 +67,7 @@ with tf.Graph().as_default():
     values, indices = tf.nn.top_k(probabilities[0], 5, name='top_k')
     
     init_fn = slim.assign_from_checkpoint_fn(
-        checkpoints_dir+'/'+net_name+net_version+'.ckpt',
+        os.path.join(download_dir, net_name+net_version+'.ckpt'),
         slim.get_model_variables('InceptionResnetV2'))
     
 
@@ -70,12 +77,12 @@ with tf.Graph().as_default():
         init_fn(sess)
 
         # Tensorboard
-        writer = tf.summary.FileWriter(checkpoints_dir + "/1")
+        writer = tf.summary.FileWriter(os.path.join(checkpoints_dir, "1"))
         writer.add_graph(sess.graph)
-        print("Tensorboard files saved in: %s" % checkpoints_dir + "/1")
+        print("Tensorboard files saved in: %s" % os.path.join(checkpoints_dir, "1"))
 
         # Save
         saver = tf.train.Saver()
-        save_path = saver.save(sess, checkpoints_dir + "/model.ckpt")
+        save_path = saver.save(sess, os.path.join(checkpoints_dir, "model.ckpt"))
         tf.train.write_graph(sess.graph.as_graph_def(), checkpoints_dir, "graph.pb")
         print("Model and graph saved in: %s\n" % checkpoints_dir)
