@@ -14,3 +14,5 @@ python download_and_save_inceptionresnet.py
 ```
 
 Hopefully (not tested yet) you can download easily all the models from [here](https://github.com/tensorflow/models/tree/master/slim#pre-trained-models) changing just a bit of the code in `download_and_save_inceptionresnet.py`.
+
+Moreover, you can freeze the InceptionResNetV2 graph using `freeze_inceptionresnet.py`.
