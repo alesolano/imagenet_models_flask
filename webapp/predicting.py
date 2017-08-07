@@ -6,35 +6,100 @@ import numpy as np
 
 from config import *
 
-### GRAPH ###
-tf.reset_default_graph()
+class Predictor():
 
-saver = tf.train.import_meta_graph('./models/inception_resnet_v2/model.ckpt.meta')
+    def __init__(self):
+        self.loaded_graph_type = None
+        self.loaded_model_name = None
+        self.saver = None
+        self.input_image_string = None
+        self.probs = None
 
-input_image_string = tf.get_default_graph().get_tensor_by_name('input_image_string:0')
-probs = tf.get_default_graph().get_tensor_by_name('probs:0')
-
-### CLASSES ###
-with open('./models/imagenet-classes.txt') as f:
-    classes = f.read().splitlines()
-    classes = np.array(classes) # if we want to access multiple elements, knowing their index
+        ### CLASSES ###
+        with open('./models/imagenet-classes.txt') as f:
+            classes = f.read().splitlines()
+            self.classes = np.array(classes) # if we want to access multiple elements, knowing their index
 
 
-def evaluate(filename):
-    ### LOAD IMAGE ###
-    with open(UPLOAD_FOLDER + '/' + filename, 'rb') as f:
-        image_string = f.read()
+    def load_graph_checkpoints(self, model_name):
+        tf.reset_default_graph()
 
-    ### SESSION ###
-    with tf.Session() as sess:
-        saver.restore(sess, './models/inception_resnet_v2/model.ckpt')
+        #try:
+        self.saver = tf.train.import_meta_graph('./models/'+model_name+'/model.ckpt.meta')
 
-        prob_values = sess.run(probs, feed_dict={
-            input_image_string: image_string
-            })
+        self.input_image_string = tf.get_default_graph().get_tensor_by_name('input_image_string:0')
+        self.probs = tf.get_default_graph().get_tensor_by_name('probs:0')
 
-        pred_idx = prob_values[0].argsort()[-5:][::-1]
-        pred_class = classes[pred_idx - 1] # from 1001 to 1000 classes
-        pred_score = np.around(100*prob_values[0][pred_idx], decimals=2) # two decimals
+        self.loaded_graph_type = 'checkpoints'
+        self.loaded_model_name = model_name
 
-        return list(pred_class), list(pred_score)
+
+    def evaluate_checkpoints(self, filename):
+        # Load image
+        with open(UPLOAD_FOLDER + '/' + filename, 'rb') as f:
+            image_string = f.read()
+
+        # Session
+        with tf.Session() as sess:
+            # Restore variables values
+            self.saver.restore(sess, './models/'+self.loaded_model_name+'/model.ckpt')
+
+            prob_values = sess.run(self.probs, feed_dict={
+                self.input_image_string: image_string
+                })
+
+            pred_idx = prob_values[0].argsort()[-5:][::-1]
+            pred_class = self.classes[pred_idx - 1] # from 1001 to 1000 classes
+            pred_score = np.around(100*prob_values[0][pred_idx], decimals=2) # two decimals
+
+            return list(pred_class), list(pred_score)
+
+
+    def load_graph_frozen(self, model_name):
+        tf.reset_default_graph()
+
+        from tensorflow.core.framework import graph_pb2
+        graph_def = graph_pb2.GraphDef()
+        with open("./models/"+model_name+"/frozen_graph.pb", "rb") as f:
+            graph_def.ParseFromString(f.read())
+        tf.import_graph_def(graph_def, name='')
+
+        #try:
+        self.input_image_string = tf.get_default_graph().get_tensor_by_name('input_image_string:0')
+        self.probs = tf.get_default_graph().get_tensor_by_name('probs:0')
+
+        self.loaded_graph_type = 'frozen'
+        self.loaded_model_name = model_name
+
+
+    def evaluate_frozen(self, filename):
+        # Load image
+        with open(UPLOAD_FOLDER + '/' + filename, 'rb') as f:
+            image_string = f.read()
+
+        # Session
+        with tf.Session() as sess:
+            prob_values = sess.run(self.probs, feed_dict={
+                self.input_image_string: image_string
+                })
+
+            pred_idx = prob_values[0].argsort()[-5:][::-1]
+            pred_class = self.classes[pred_idx - 1] # from 1001 to 1000 classes
+            pred_score = np.around(100*prob_values[0][pred_idx], decimals=2) # two decimals
+
+            return list(pred_class), list(pred_score)
+
+
+    def evaluate(self, filename, model_name, graph_type):
+        if graph_type == 'checkpoints':
+            if (graph_type != self.loaded_graph_type) or (model_name != self.loaded_model_name):
+                self.load_graph_checkpoints(model_name)
+            pred_class, pred_score = self.evaluate_checkpoints(filename)
+
+        elif graph_type == 'frozen':
+            if (graph_type != self.loaded_graph_type) or (model_name != self.loaded_model_name):
+                self.load_graph_frozen(model_name)
+            pred_class, pred_score = self.evaluate_frozen(filename)
+
+        # if pred_class != None
+        return pred_class, pred_score

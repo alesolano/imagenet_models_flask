@@ -12,7 +12,8 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 import time
-import predicting
+from predicting import Predictor
+predictor = Predictor()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -74,7 +75,10 @@ def uploaded():
         import_options=import_options)
     '''
     begin = time.time()
-    pred_class, pred_score = predicting.evaluate(filename=request.args.get('filename'))
+    pred_class, pred_score = predictor.evaluate(
+        filename=request.args.get('filename'),
+        model_name='inception_resnet_v2',
+        graph_type='checkpoints')
     end = time.time()
     print("\nElapsed time: %0.5f seconds." % (end-begin))
     

@@ -2,35 +2,54 @@
 
 Try different deep learning models for object recognition using Flask.
 
-### Set environment
+## Set environment
 
-Using Anaconda:
-
-```
-conda create -n imagenet_models_flask
-source activate imagenet_models_flask
-```
+#### Ubuntu 16.04
 
 ```
-#pip install tensorflow
-conda install -c menpo opencv3
+conda create -n imagenet_flask python=3.6
+source activate imagenet_flask
+```
+
+```
+pip install tensorflow
+conda install -c anaconda flask 
+conda install flask-wtf
+pip install flask-bootstrap
+```
+
+#### MacOS
+
+```
+conda create -n imagenet_flask python=3.6
+source activate imagenet_flask
+```
+```
 conda install -c anaconda flask
 conda install flask-wtf tensorflow
 pip install flask-bootstrap
 ```
 
-### Run
+## Download models
+
+See README.md in `./webapp/models/`.
+
+## Run
+
+#### Ubuntu 16.04 and MacOS
 
 ```
-Mac:
 cd webapp
 export FLASK_APP=webapp.py
 export FLASK_DEBUG=1
 flask run
+```
 
-Win:
+#### Windows 10
+
+```
 cd webapp
 set FLASK_APP=webapp.py
-set FLASK_DEBUG = 1
+set FLASK_DEBUG=1
 flask run
 ```
