@@ -1,19 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
-    <title>New file succesfully uploaded</title>
-    <h2>New file succesfully uploaded!</h2>
+    <div>
+        <title>New file succesfully uploaded</title>
+        <h2>New file succesfully uploaded!</h2>
 
-    I'm {{pred_score_0}}% sure that this is a:
+        I'm {{pred_score_0}}% sure that this is a:
 
-    <h4><b>{{pred_class_0}}</b></h4>
+        <h4><b>{{pred_class_0}}</b></h4>
 
-    Other options: <br />
-    <b>{{pred_class_1}}</b> with {{pred_score_1}}% of certainty <br />
-    <b>{{pred_class_2}}</b> with {{pred_score_2}}% of certainty <br />
-    <b>{{pred_class_3}}</b> with {{pred_score_3}}% of certainty <br />
-    <b>{{pred_class_4}}</b> with {{pred_score_4}}% of certainty <br />
+        Other options: <br />
+        <b>{{pred_class_1}}</b> with {{pred_score_1}}% of certainty <br />
+        <b>{{pred_class_2}}</b> with {{pred_score_2}}% of certainty <br />
+        <b>{{pred_class_3}}</b> with {{pred_score_3}}% of certainty <br />
+        <b>{{pred_class_4}}</b> with {{pred_score_4}}% of certainty <br />
 
-    <br />
-    Elapsed time: {{elapsed_time}} seconds. 
-
+        {{filename}}
+        <br />
+        Elapsed time: {{elapsed_time}} seconds.
+    </div>
+    <div>
+        <img src="{{url_for('static', filename='image_repository/'+filename)}}" width="450" />
+    </div>
 {% endblock %}
