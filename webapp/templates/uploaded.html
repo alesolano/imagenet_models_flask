@@ -14,11 +14,12 @@
         <b>{{pred_class_3}}</b> with {{pred_score_3}}% of certainty <br />
         <b>{{pred_class_4}}</b> with {{pred_score_4}}% of certainty <br />
 
-        {{filename}}
         <br />
         Elapsed time: {{elapsed_time}} seconds.
     </div>
+    
     <div>
+        <br />
         <img src="{{url_for('static', filename='image_repository/'+filename)}}" width="450" />
     </div>
 {% endblock %}

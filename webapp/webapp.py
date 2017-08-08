@@ -26,6 +26,15 @@ def index():
             print('No file part')
             return redirect(request.url)
 
+        if 'import_options' not in request.form:
+            print('No import option selected')
+            return redirect(request.url)
+
+        if 'ml_models' not in request.form:
+            print('No model selected')
+            return redirect(request.url)
+
+
         '''Optional: check if the post request has import_options or ml_models.
         But more elegant is to do it in the front end.
 
@@ -52,9 +61,7 @@ def index():
             print('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            print ('filename',file.filename)
             filename = secure_filename(file.filename)
-            print ('secure_filename',filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #return redirect('/uploaded')
             print('return successful')
@@ -76,7 +83,6 @@ def uploaded():
         model_name=model_name,
         graph_type=import_option)
     end = time.time()
-    #print("\nElapsed time: %0.5f seconds." % (end-begin))
     
     return render_template("uploaded.html",
         filename=filename,
