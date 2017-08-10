@@ -90,6 +90,20 @@ class Predictor():
             return list(pred_class), list(pred_score)
 
 
+    def evaluate_compiled(self, filename, model_name):
+        pred_class = []
+        pred_score = []
+
+        import subprocess
+        output = subprocess.check_output(['./models/imagenet_cc', './models/'+model_name+'/frozen_graph.pb', UPLOAD_FOLDER+'/'+filename])
+        output = output.splitlines()
+        for index, value in zip(output[0::2], output[1::2]):
+            pred_class.append(self.classes[int(index)])
+            pred_score.append(float(value)*100)
+
+        return pred_class, np.around(pred_score, decimals=2)
+
+
     def evaluate(self, filename, model_name, graph_type):
         if graph_type == 'checkpoints':
             if (graph_type != self.loaded_graph_type) or (model_name != self.loaded_model_name):
@@ -100,6 +114,9 @@ class Predictor():
             if (graph_type != self.loaded_graph_type) or (model_name != self.loaded_model_name):
                 self.load_graph_frozen(model_name)
             pred_class, pred_score = self.evaluate_frozen(filename)
+
+        elif graph_type == 'compiled':
+            pred_class, pred_score = self.evaluate_compiled(filename, model_name)
 
         # if pred_class != None
         return pred_class, pred_score
