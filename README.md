@@ -2,6 +2,14 @@
 
 Try different deep learning models for object recognition using Flask.
 
+<p align="center">
+    <img src="media/index_page.png", width="480">
+</p>
+
+<p align="center">
+    <img src="media/uploaded_page.png", width="480">
+</p>
+
 ## Set environment
 
 #### Ubuntu 16.04 (tested)
