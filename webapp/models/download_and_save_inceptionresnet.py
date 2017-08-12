@@ -6,7 +6,7 @@ from tensorflow.contrib import slim
 
 from sys import path as syspath
 
-models_slim_dir = None
+models_slim_dir = '/private/tmp/tensorflow_models/models/slim'
 if models_slim_dir is None:
     print("Replace 'models_slim_dir' with path of clone_dir/models/slim from: git clone https://github.com/tensorflow/models.git")
     exit()
@@ -28,7 +28,7 @@ net_version = '_2016_08_30'
 url = "http://download.tensorflow.org/models/"+net_name+net_version+".tar.gz"
 checkpoints_dir = net_name
 
-download_dir = None
+download_dir = '/tmp/'+net_name
 if download_dir is None:
     print("Replace 'download_dir' with your path for downloading. Recommended for Linux and MacOS:  '/tmp/'+net_name  ")
     exit()
