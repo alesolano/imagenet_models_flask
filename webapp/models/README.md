@@ -53,6 +53,8 @@ TODO
 
 ### Download and use MobileNets model
 
+#### Model checkpoints and freeze model
+
 For MobileNets, it's a little bit more tricky. Until we discover a way to make downloading more general, you can use the script 'download\_save\_and\_freeze\_mobilenet.py'.
 
 But, **hey**: do not forget to set the variables `models_slim_dir` and `download_dir` as previously described. 
