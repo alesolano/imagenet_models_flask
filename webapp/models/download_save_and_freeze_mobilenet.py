@@ -19,16 +19,17 @@ from tensorflow.python.framework import graph_util
 
 from sys import path as syspath
 
-models_slim_dir = None
+models_slim_dir = '/private/tmp/tensorflow_models/models/slim'
 if models_slim_dir is None:
   print("Replace 'models_slim_dir' with path of clone_dir/models/slim from: git clone https://github.com/tensorflow/models.git")
   exit()
 else:
   syspath.append(models_slim_dir)
+  print('path appended')
 
 net_name = 'mobilenet_v1'
 
-download_dir = None
+download_dir = '/tmp/'+net_name
 if download_dir is None:
     print("Replace 'download_dir' with your path for downloading. Recommended for Linux and MacOS:  '/tmp/'+net_name  ")
     exit()
